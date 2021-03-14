@@ -13,8 +13,10 @@ import pickle
 from tensorflow.python.framework import ops
 
 
-from archives.DataBase import getObjects
+from archives.DataBase import getObjects, WriteHistory
 
+data = getObjects()
+data = json.loads(data)
 
 #with open("archives\intents.json") as file:
 #    data = json.load(file)
@@ -24,9 +26,6 @@ try:
     with open("Processor\data\data.pickle", "rb") as f:
         words, labels, training, output = pickle.load(f)
 except:
-    data = getObjects()
-    data = json.loads(data)
-
     words = []
     labels = []
     docs_x = []
@@ -119,12 +118,8 @@ def bag_of_words(s, words):
 
 
 
-def history(tag, msg, filename='archives/history.json'): 
-    feeds = []
-    with open(filename, mode='w', encoding='utf-8') as feedsjson:
-        entry = {'tag': tag, 'msg': msg}
-        feeds.append(entry)
-        json.dump(feeds, feedsjson)  
+def history(tag, msg, resposta): 
+    WriteHistory(msg, tag, resposta)
 
 
 def machine(msg) :
@@ -139,11 +134,13 @@ def machine(msg) :
     for tg in data:
         print('tag padrao = ', tag, tg['tag'])
         if tg['tag'] == tag:
-            history(tag, msg)
             print('tag', tag)
             responses = tg['responses']
 
-    return random.choice(responses)
+    retornar = random.choice(responses)
+    history(tag, msg, retornar)
+
+    return retornar
 
 def training() :
     model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
