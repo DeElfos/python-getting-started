@@ -20,8 +20,6 @@ urlpatterns = [
     #url(r'^reque/$', hello.views.requ, name='search'),
     #path("", hello.views.index, name="index"),
     #path("db/", hello.views.db, name="db"),
-    #
-    url(r'^register/$', hello.views.requ, name='urlname'),
     path("admin/", admin.site.urls),
     path("reque/", hello.views.requ, name="machine" )
 ]

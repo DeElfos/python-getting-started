@@ -13,19 +13,26 @@ import pickle
 from tensorflow.python.framework import ops
 
 
-with open("archives\intents.json") as file:
-    data = json.load(file)
+from archives.DataBase import getObjects
+
+
+#with open("archives\intents.json") as file:
+#    data = json.load(file)
+
 
 try:
     with open("Processor\data\data.pickle", "rb") as f:
         words, labels, training, output = pickle.load(f)
 except:
+    data = getObjects()
+    data = json.loads(data)
+
     words = []
     labels = []
     docs_x = []
     docs_y = []
 
-    for intent in data["intents"]:
+    for intent in data:
         for pattern in intent["patterns"]:
             wrds = nltk.word_tokenize(pattern)
             words.extend(wrds)
@@ -70,23 +77,30 @@ except:
         pickle.dump((words, labels, training, output), f)
 
 
+# --------------------------------------------------------------
+# --------------------------------------------------------------
+# --------------------------------------------------------------
+# --------------------------------------------------------------
+ops.reset_default_graph()
+
+net = tflearn.input_data(shape=[None, len(training[0])])
+net = tflearn.fully_connected(net, 8)
+net = tflearn.fully_connected(net, 8)
+net = tflearn.fully_connected(net, len(output[0]), activation='softmax')
+net = tflearn.regression(net)
+
+model = tflearn.DNN(net)
 
 try:
     model.load('Processor\data\model.tflearn')
 except:
-    ops.reset_default_graph()
-
-    net = tflearn.input_data(shape=[None, len(training[0])])
-    net = tflearn.fully_connected(net, 8)
-    net = tflearn.fully_connected(net, 8)
-    net = tflearn.fully_connected(net, len(output[0]), activation='softmax')
-    net = tflearn.regression(net)
-
-    model = tflearn.DNN(net)
-
     model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
     model.save("Processor\data\model.tflearn")
 
+# --------------------------------------------------------------
+# --------------------------------------------------------------
+# --------------------------------------------------------------
+# --------------------------------------------------------------
 
 def bag_of_words(s, words):
     bag = [0 for _ in range(len(words))]
@@ -102,29 +116,15 @@ def bag_of_words(s, words):
     return numpy.array(bag)
 
 
-def chat():
-    print("Start talking with the bot (type quit to stop)!")
-    while True:
-        inp = input("You: ")
-        if inp.lower() == "quit":
-            break
-
-        results = model.predict([bag_of_words(inp, words)])
-        results_index = numpy.argmax(results)
-        tag = labels[results_index]
-
-        for tg in data["intents"]:
-            if tg['tag'] == tag:
-                responses = tg['responses']
-
-        print(random.choice(responses))
-
-#chat()
 
 
 
-
-
+def history(tag, msg, filename='archives/history.json'): 
+    feeds = []
+    with open(filename, mode='w', encoding='utf-8') as feedsjson:
+        entry = {'tag': tag, 'msg': msg}
+        feeds.append(entry)
+        json.dump(feeds, feedsjson)  
 
 
 def machine(msg) :
@@ -133,8 +133,59 @@ def machine(msg) :
     results_index = numpy.argmax(results)
     tag = labels[results_index]
 
-    for tg in data["intents"]:
+    print('datatype = ', type(data) )
+    
+
+    for tg in data:
+        print('tag padrao = ', tag, tg['tag'])
         if tg['tag'] == tag:
+            history(tag, msg)
+            print('tag', tag)
             responses = tg['responses']
 
     return random.choice(responses)
+
+def training() :
+    model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
+    model.save("Processor\data\model.tflearn")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# def chat():
+#     print("Start talking with the bot (type quit to stop)!")
+    
+#     while True:
+#         inp = input("You: ")
+#         if inp.lower() == "quit":
+#             break
+
+#         results = model.predict([bag_of_words(inp, words)])
+#         results_index = numpy.argmax(results)
+#         tag = labels[results_index]
+
+#         for tg in data:
+
+#             if tg['tag'] == tag:
+#                 responses = tg['responses']
+
+#         print(random.choice(responses))
+
+#chat()

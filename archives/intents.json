@@ -1,23 +1,23 @@
 {"intents": [
     {"tag": "saudacao",
      "patterns": ["Oi", "Ola", "Oi tudo bem:", "Tem alguem ai?", "Pode me ajudar"],
-     "responses": ["Oi tudo bem e voce ?", "Ola, como posso te ajudar ?", "Oi, como podemos te ajudar?"],
+     "responses": ["Oi, tudo bem e voce ?", "Olá, como posso te ajudar?", "Oi, como podemos te ajudar?"],
      "context_set": ""
     },
     {"tag": "despedida",
      "patterns": ["Tchau", "Ate mais", "abracos"],
-     "responses": ["Até mais, obrigado pela visita!", "Tenha um otimo dia!", "Atè, um abraço."]
+     "responses": ["Até mais, obrigado pela visita!", "Tenha um ótimo dia!", "Até, um abraço."]
     },
     {"tag": "agradecimento",
-     "patterns": ["Obrigado", "Obrigado pela ajuda", "Muito obrgado","Voce me ajudou"],
+     "patterns": ["Obrigado", "Obrigado pela ajuda", "Muito obrigado","Voce me ajudou"],
      "responses": ["De nada!", "Fico feliz em ajudar!", "Disponha"]
     },
     {"tag": "horario",
      "patterns": ["Que horas abre a loja?", "Voce abrem que horas?", "Qual o horario de funcionamento" ],
-     "responses": ["Nosso horario e das 08h as 23h", "Estamos aberto das  08h as 23h"]
+     "responses": ["Nosso horario é das 08h as 23h", "Estamos aberto das  08h as 23h"]
     },
     {"tag": "produto",
-     "patterns": ["O que voces vendem ?", "Qual o seu produto?", "O que esta a venda?" ],
+     "patterns": ["O que voces vendem?", "Qual o seu produto?", "O que esta a venda?" ],
      "responses": ["Nos trabalhamos com a producao de pizza artesanal.", "Pizza artesanais!"]
     },
     {"tag": "pagamentos",
