@@ -1,0 +1,9 @@
+heroku local web -f Procfile.windows
+
+pip freeze > requirements.txt
+
+
+git add .
+git commit -m "Demo"
+git push heroku main
+heroku open
