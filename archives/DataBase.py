@@ -12,6 +12,7 @@ from django.core import serializers
 USER_MONGO = os.getenv("USER_MONGO")
 PASS_MONGO = os.getenv("PASS_MONGO")
 DATA_MONGO = os.getenv("DATA_MONGO")
+print('userdata', USER_MONGO, PASS_MONGO, DATA_MONGO)
 
 client = pymongo.MongoClient(f'mongodb+srv://{USER_MONGO}:{PASS_MONGO}@cluster0.a5pjd.mongodb.net/{DATA_MONGO}?retryWrites=true&w=majority')
 db = client.myFirstDatabase
