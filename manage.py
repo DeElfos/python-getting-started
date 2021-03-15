@@ -2,6 +2,9 @@
 import os
 import sys
 
+import nltk
+nltk.download('punkt')
+
 os.environ["PYTHONIOENCODING"] = "utf-8"
 
 if __name__ == "__main__":
