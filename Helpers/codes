@@ -7,3 +7,5 @@ git add .
 git commit -m "Demo"
 git push heroku main
 heroku open
+
+heroku config:set env_var=env_value
